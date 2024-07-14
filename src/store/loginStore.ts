@@ -2,9 +2,13 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { jwtDecode } from "jwt-decode";
 
+type Role = "Admin" | "Editor" | "User";
+type Status = "active" | "inActive";
+
 interface UserInfo {
   username: string;
-  roles: string[];
+  roles: Role;
+  status: Status;
 }
 
 interface LoginState {
@@ -13,13 +17,7 @@ interface LoginState {
   setCredentials: (accessToken: string) => void;
   logOut: () => void;
   setPersist: (value: boolean) => void;
-  getLoginUser: () => {
-    username: string;
-    roles: string[];
-    status: string;
-    isEditor: boolean;
-    isAdmin: boolean;
-  };
+  getLoginUser: () => UserInfo;
 }
 
 const useLoginStore = create<LoginState>()(
@@ -33,19 +31,22 @@ const useLoginStore = create<LoginState>()(
       getLoginUser: () => {
         const token = get().token;
         if (token) {
-          const decoded = jwtDecode<{ UserInfo: UserInfo }>(token);
-          const { username, roles } = decoded.UserInfo;
-          const isEditor = roles.includes("Editor") || false;
-          const isAdmin = roles.includes("Admin") || false;
-          const status = isAdmin ? "Admin" : isEditor ? "Editor" : "User";
-          return { username, roles, isEditor, isAdmin, status };
+          try {
+            const decoded = jwtDecode<{ UserInfo: UserInfo }>(token);
+            const { username, roles, status } = decoded.UserInfo;
+            return {
+              username,
+              roles,
+              status,
+            };
+          } catch (error) {
+            console.error("Failed to decode token:", error);
+          }
         }
         return {
           username: "",
-          roles: [],
-          status: "User",
-          isEditor: false,
-          isAdmin: false,
+          roles: "User",
+          status: "inActive",
         };
       },
     }),
