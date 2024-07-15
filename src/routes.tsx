@@ -8,18 +8,22 @@ import HomePage from "@/pages/Home";
 import AdminPage from "@/pages/Admin";
 import SignUpPage from "@/pages/SignUp";
 import SignInPage from "@/pages/SignIn";
+import SignOutPage from "@/pages/SignOut";
+import BlogPage from "@/pages/Blog";
 import NotFound from "@/pages/default/NotFound";
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  roles: string[];
+  rolesArray: string[];
 }
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, roles }) => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  rolesArray,
+}) => {
   const hasToken = useLoginStore((state) => state.token);
   const getLoginUser = useLoginStore((state) => state.getLoginUser);
   const user = getLoginUser();
   const location = useLocation();
-
-  if (hasToken && roles.includes(user.status)) {
+  if (hasToken && rolesArray.includes(user.roles)) {
     return (
       <>
         {children}
@@ -27,7 +31,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, roles }) => {
       </>
     );
   } else {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to="/sign-in" state={{ from: location }} replace />;
   }
 };
 
@@ -48,9 +52,25 @@ const routes = [
     ],
   },
   {
-    path: "/admin",
-    element: <ProtectedRoute children={<AdminPage />} roles={["admin"]} />,
+    path: "/blog",
+    element: (
+      <ProtectedRoute
+        children={<BlogPage />}
+        rolesArray={["Admin", "Editor", "User"]}
+      />
+    ),
+    children: [
+      {
+        path: "sign-out",
+        element: <SignOutPage />,
+      },
+    ],
   },
+  {
+    path: "/admin",
+    element: <ProtectedRoute children={<AdminPage />} rolesArray={["Admin"]} />,
+  },
+
   { path: "/*", element: <NotFound /> },
 ];
 
