@@ -9,7 +9,7 @@ export interface RegisterCredentials {
   status: "active" | "inActive";
   profile?: {
     avatar?: string;
-    firstName: string;
+    firstName?: string;
     lastName?: string;
     gender?: "male" | "female" | "other" | "prefer not to say";
     birthDate?: string;

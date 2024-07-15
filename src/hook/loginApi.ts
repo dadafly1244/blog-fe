@@ -33,7 +33,7 @@ export const useLogout = () => {
   const logOut = useLoginStore((state) => state.logOut);
   const queryClient = useQueryClient();
   return useMutation<void, AxiosError>({
-    mutationFn: () => api.post("/logout"),
+    mutationFn: () => api.get("/logout"),
     onSuccess: () => {
       logOut();
       queryClient.clear();

@@ -11,7 +11,7 @@ const SignOutPage: React.FC = () => {
     try {
       await logout.mutateAsync();
       logOut();
-      navigate("/sign-out");
+      navigate("/");
     } catch (error) {
       console.error("Logout failed:", error);
     }

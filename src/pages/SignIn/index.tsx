@@ -19,7 +19,7 @@ const SignInPage: React.FC = () => {
       {
         onSuccess: (data) => {
           // data에서 accessToken과 refreshToken을 추출
-          const { accessToken } = data;
+          const { accessToken } = data.data;
           // loginStore의 setCredentials 함수를 사용하여 토큰들을 저장
           useLoginStore.getState().setCredentials(accessToken);
           navigate("/blog");

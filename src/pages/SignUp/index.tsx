@@ -195,7 +195,6 @@ const SignUpPage: React.FC = () => {
           name="profile.firstName"
           value={formData.profile?.firstName}
           onChange={handleChange}
-          required
         />
 
         <label htmlFor="profile.lastName">Last Name:</label>

@@ -31,7 +31,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       </>
     );
   } else {
-    return <Navigate to="/sign-in" state={{ from: location }} replace />;
+    alert("접근할 수 없습니다. 관리자 권한이 필요합니다. ");
+    return <Navigate to="/blog" state={{ from: location }} />;
   }
 };
 
