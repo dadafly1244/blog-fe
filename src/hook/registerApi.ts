@@ -6,16 +6,16 @@ export interface RegisterCredentials {
   user: string;
   pwd: string;
   roles: "Admin" | "Editor" | "User";
-  status: string;
+  status: "active" | "inActive";
   profile?: {
-    avatar: string;
+    avatar?: string;
     firstName: string;
     lastName?: string;
     gender?: "male" | "female" | "other" | "prefer not to say";
     birthDate?: string;
     bio: string;
     location?: string;
-    website: string;
+    website?: string;
     socialLinks?: {
       facebook?: string;
       twitter?: string;

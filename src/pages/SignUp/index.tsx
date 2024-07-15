@@ -13,7 +13,7 @@ const SignUpPage: React.FC = () => {
     user: "",
     pwd: "",
     roles: "User",
-    status: "Active",
+    status: "active",
     profile: {
       avatar: "",
       firstName: "",
@@ -95,7 +95,7 @@ const SignUpPage: React.FC = () => {
           user: "",
           pwd: "",
           roles: "User",
-          status: "Active",
+          status: "active",
           profile: {
             avatar: "",
             firstName: "",
@@ -113,7 +113,7 @@ const SignUpPage: React.FC = () => {
             },
           },
         });
-        navigate("/login");
+        navigate("/sign-in");
       },
       onError: (error) => {
         if (!error.response) {
@@ -169,9 +169,10 @@ const SignUpPage: React.FC = () => {
           name="roles"
           value={formData.roles}
           onChange={handleChange}
-          defaultValue={"User"}
         >
-          <option value="User">User</option>
+          <option defaultChecked value="User">
+            User
+          </option>
           <option value="Editor">Editor</option>
           <option value="Admin">Admin</option>
         </select>

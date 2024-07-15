@@ -13,8 +13,9 @@ interface UserInfo {
 
 interface LoginState {
   token: string | null;
+  refreshToken: string | null;
   persist: boolean;
-  setCredentials: (accessToken: string) => void;
+  setCredentials: (accessToken: string, refreshToken: string) => void;
   logOut: () => void;
   setPersist: (value: boolean) => void;
   getLoginUser: () => UserInfo;
@@ -24,9 +25,11 @@ const useLoginStore = create<LoginState>()(
   persist(
     (set, get) => ({
       token: null,
+      refreshToken: null,
       persist: false,
-      setCredentials: (accessToken: string) => set({ token: accessToken }),
-      logOut: () => set({ token: null }),
+      setCredentials: (accessToken: string, refreshToken: string) =>
+        set({ token: accessToken, refreshToken: refreshToken }),
+      logOut: () => set({ token: null, refreshToken: null }),
       setPersist: (value: boolean) => set({ persist: value }),
       getLoginUser: () => {
         const token = get().token;
@@ -52,6 +55,28 @@ const useLoginStore = create<LoginState>()(
     }),
     {
       name: "login-storage",
+      storage: {
+        getItem: (name) => {
+          const token = localStorage.getItem(`${name}_token`);
+          const refreshToken = sessionStorage.getItem(`${name}_refreshToken`);
+          return { state: { token, refreshToken } };
+        },
+        setItem: (name, value) => {
+          if (value.state.token) {
+            localStorage.setItem(`${name}_token`, value.state.token);
+          }
+          if (value.state.refreshToken) {
+            sessionStorage.setItem(
+              `${name}_refreshToken`,
+              value.state.refreshToken
+            );
+          }
+        },
+        removeItem: (name) => {
+          localStorage.removeItem(`${name}_token`);
+          sessionStorage.removeItem(`${name}_refreshToken`);
+        },
+      },
     }
   )
 );
